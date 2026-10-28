@@ -42,6 +42,7 @@ input_data = pd.DataFrame([{
     'Occupation': Occupation,
     'Gender': Gender,
     'ProductPitched': ProductPitched,
+    'Designation': Designation,
     'MaritalStatus': MaritalStatus,
     'Age': Age,
     'CityTier': CityTier,

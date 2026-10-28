@@ -59,12 +59,29 @@ input_data = pd.DataFrame([{
 }])
 
 # Predict button
+
 if st.button("Tourism Prediction"):
 
-    # Generate prediction using the trained ML pipeline
-    prediction = model.predict(input_data)[0]
+    # Get probability for class 1 (ProdTaken = 1)
+    probability = model.predict_proba(input_data)[0][1]
 
-    st.subheader("Prediction Result:")
+    # Use the same threshold as your training code
+    classification_threshold = 0.45
+
+    prediction = int(
+        probability >= classification_threshold
+    )
+
+    st.subheader("Prediction Result")
+
+    st.write(
+        f"Purchase Probability: {probability:.2%}"
+    )
+
+    st.write(
+        f"Classification Threshold: "
+        f"{classification_threshold:.0%}"
+    )
 
     if prediction == 1:
         st.success(

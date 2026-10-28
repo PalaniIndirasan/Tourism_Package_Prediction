@@ -17,7 +17,7 @@ Please enter the details below to get a prediction.
 # User input
 TypeofContact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
 Occupation = st.selectbox("Occupation", ["Free Lancer", "Salaried", "Large Business", "Small Business"])
-Designation = st.selectbox("Designation", ["Executive", "Manager", "Professional", "Other"])
+Designation = st.selectbox("Designation", ["AVP", "Executive", "Manager", "Senior Manager", "VP"])
 Gender = st.selectbox("Gender", ["Male", "Female"])
 ProductPitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "King", "Super Deluxe"])
 MaritalStatus = st.selectbox("Marital Status", ["Single", "Divorced", "Married"])

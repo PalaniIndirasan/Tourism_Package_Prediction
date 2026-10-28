@@ -24,14 +24,14 @@ MaritalStatus = st.selectbox("Marital Status", ["Single", "Divorced", "Married"]
 
 Age = st.number_input("Age", min_value=1, max_value=100, value=25, step=1)
 CityTier = st.number_input("CityTier", min_value=1, max_value=3, value=1, step=1)
-DurationOfPitch = st.number_input("DurationOfPitch", min_value=5, max_value=127, value=1, step=1)
+DurationOfPitch = st.number_input("DurationOfPitch", min_value=5, max_value=127, value=5, step=1)
 NumberOfPersonVisiting = st.number_input("NumberOfPersonVisiting", min_value=1, max_value=5, value=1, step=1)
 NumberOfFollowups = st.number_input("NumberOfFollowups", min_value=1, max_value=6, value=1, step=1)
 NumberOfTrips = st.number_input("NumberOfTrips", min_value=1, max_value=22, value=1, step=1)
 PreferredPropertyStar = st.number_input("PreferredPropertyStar", min_value=1, max_value=5, value=1, step=1)
 Passport = st.number_input("Passport", min_value=0, max_value=1, value=1, step=1)
 PitchSatisfactionScore = st.number_input("PitchSatisfactionScore", min_value=1, max_value=5, value=1, step=1)
-OwnCar = st.number_input("OwnCar", min_value=0, max_value=1, value=1, step=1)
+OwnCar = st.number_input("OwnCar", min_value=0, max_value=1, value=0, step=1)
 NumberOfChildrenVisiting = st.number_input("NumberOfChildrenVisiting", min_value=0, max_value=3, value=1, step=1)
 MonthlyIncome = st.number_input("MonthlyIncome", min_value=0, max_value=100000, value=10000, step=1000)
 

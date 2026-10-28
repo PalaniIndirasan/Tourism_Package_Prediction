@@ -22,7 +22,7 @@ ProductPitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe",
 MaritalStatus = st.selectbox("Marital Status", ["Single", "Divorced", "Married"])
 
 
-Age = st.number_input("Age", min_value=1.0, max_value=100.0, value=1.0, step=1)
+Age = st.number_input("Age", min_value=1, max_value=100, value=25, step=1)
 CityTier = st.number_input("CityTier", min_value=1.0, max_value=3.0, value=1.0, step=1)
 DurationOfPitch = st.number_input("DurationOfPitch", min_value=5, max_value=126, value=1, step=1)
 NumberOfPersonVisiting = st.number_input("NumberOfPersonVisiting", min_value=1, max_value=5, value=1, step=1)

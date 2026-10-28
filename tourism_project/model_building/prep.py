@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
 
 df = pd.read_csv("tourism_project/data/tourism.csv", on_bad_lines="skip")
 print("Dataset loaded successfully.")

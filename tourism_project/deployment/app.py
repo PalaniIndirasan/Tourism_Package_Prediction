@@ -1,74 +1,62 @@
-import os
-import streamlit as st
-import pandas as pd
+"""Streamlit app using the exact saved classifier pipeline."""
+from pathlib import Path
 import joblib
+import pandas as pd
+import streamlit as st
 
-# Load the model committed by the pipeline (sits next to this file)
-model_path = os.path.join(os.path.dirname(__file__), "tourism_package_prediction.joblib")
-model = joblib.load(model_path)
-
-# Streamlit UI
+MODEL_PATH = Path(__file__).resolve().parent / "tourism_package_prediction.joblib"
+st.set_page_config(page_title="Tourism Package Prediction")
 st.title("Tourism Package Prediction")
-st.write("""
-This application predicts whether a customer will purchase the newly introduced Wellness Tourism Package.
-Please enter the details below to get a prediction.
-""")
 
-# User input
-TypeofContact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
-Occupation = st.selectbox("Occupation", ["Free Lancer", "Salaried", "Large Business", "Small Business"])
-Gender = st.selectbox("Gender", ["Male", "Female"])
-ProductPitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "King", "Super Deluxe"])
-MaritalStatus = st.selectbox("Marital Status", ["Single", "Divorced", "Married"])
+@st.cache_resource
+def load_model():
+    if not MODEL_PATH.is_file():
+        raise FileNotFoundError(f"Model not found: {MODEL_PATH}. Run the training workflow first.")
+    return joblib.load(MODEL_PATH)
 
+try:
+    model = load_model()
+except Exception as exc:
+    st.error(f"Unable to load model: {exc}")
+    st.stop()
 
-Age = st.number_input("Age", min_value=1.0, max_value=100.0, value=1.0, step=1)
-CityTier = st.number_input("CityTier", min_value=1.0, max_value=3.0, value=1.0, step=1)
-DurationOfPitch = st.number_input("DurationOfPitch", min_value=5, max_value=126, value=1, step=1)
-NumberOfPersonVisiting = st.number_input("NumberOfPersonVisiting", min_value=1, max_value=5, value=1, step=1)
-NumberOfFollowups = st.number_input("NumberOfFollowups", min_value=1, max_value=6, value=1, step=1)
-NumberOfTrips = st.number_input("NumberOfTrips", min_value=1, max_value=22, value=1, step=1)
-PreferredPropertyStar = st.number_input("PreferredPropertyStar", min_value=1, max_value=5, value=1, step=1)
-Passport = st.number_input("Passport", min_value=0, max_value=1, value=1, step=1)
-PitchSatisfactionScore = st.number_input("PitchSatisfactionScore", min_value=1, max_value=5, value=1, step=1)
-OwnCar = st.number_input("OwnCar", min_value=0, max_value=1, value=1, step=1)
-NumberOfChildrenVisiting = st.number_input("NumberOfChildrenVisiting", min_value=0, max_value=3, value=1, step=1)
-MonthlyIncome = st.number_input("MonthlyIncome", min_value=0, max_value=100000, value=10000, step=1000)
+with st.form("prediction_form"):
+    contact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
+    occupation = st.selectbox("Occupation", ["Salaried", "Free Lancer", "Small Business", "Large Business"])
+    gender = st.selectbox("Gender", ["Female", "Male"])
+    product = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "King", "Super Deluxe"])
+    marital = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
+    designation = st.selectbox("Designation", ["Executive", "Manager", "Senior Manager", "AVP", "VP"])
+    age = st.number_input("Age", min_value=18, max_value=100, value=35)
+    city_tier = st.number_input("City Tier", min_value=1, max_value=3, value=1)
+    duration = st.number_input("Duration of Pitch", min_value=0.0, value=15.0)
+    visitors = st.number_input("Number of People Visiting", min_value=1, value=2)
+    followups = st.number_input("Number of Followups", min_value=0, value=2)
+    star = st.number_input("Preferred Property Star", min_value=1, max_value=5, value=3)
+    trips = st.number_input("Number of Trips", min_value=0, value=2)
+    passport = st.selectbox("Passport", [0, 1])
+    satisfaction = st.number_input("Pitch Satisfaction Score", min_value=1, max_value=5, value=3)
+    car = st.selectbox("Own Car", [0, 1])
+    children = st.number_input("Number of Children Visiting", min_value=0, value=0)
+    income = st.number_input("Monthly Income", min_value=0.0, value=25000.0)
+    submitted = st.form_submit_button("Tourism Prediction")
 
-# Assemble input into DataFrame
-input_data = pd.DataFrame([{
-    'TypeofContact': TypeofContact,
-    'Occupation': Occupation,
-    'Gender': Gender,
-    'ProductPitched': ProductPitched,
-    'MaritalStatus': MaritalStatus,
-    'Age': Age,
-    'CityTier': CityTier,
-    'DurationOfPitch': DurationOfPitch,
-    'NumberOfPersonVisiting': NumberOfPersonVisiting,
-    'NumberOfFollowups': NumberOfFollowups,
-    'NumberOfTrips': NumberOfTrips,
-    'PreferredPropertyStar': PreferredPropertyStar,
-    'Passport': Passport,
-    'PitchSatisfactionScore': PitchSatisfactionScore,
-    'OwnCar': OwnCar,
-    'NumberOfChildrenVisiting': NumberOfChildrenVisiting,
-    'MonthlyIncome': MonthlyIncome
-}])
-
-# Predict button
-if st.button("Tourism Prediction"):
-
-    # Generate prediction using the trained ML pipeline
-    prediction = model.predict(input_data)[0]
-
-    st.subheader("Prediction Result:")
-
-    if prediction == 1:
-        st.success(
-            "Customer is likely to purchase the tourism package."
-        )
+if submitted:
+    input_data = pd.DataFrame([{
+        "TypeofContact": contact, "Occupation": occupation, "Gender": gender,
+        "ProductPitched": product, "MaritalStatus": marital,
+        "Designation": designation, "Age": age, "CityTier": city_tier,
+        "DurationOfPitch": duration, "NumberOfPersonVisiting": visitors,
+        "NumberOfFollowups": followups, "PreferredPropertyStar": star,
+        "NumberOfTrips": trips, "Passport": passport,
+        "PitchSatisfactionScore": satisfaction, "OwnCar": car,
+        "NumberOfChildrenVisiting": children, "MonthlyIncome": income
+    }])
+    probability = float(model.predict_proba(input_data)[0, 1])
+    prediction = int(probability >= 0.45)
+    st.subheader("Prediction Result")
+    if prediction:
+        st.success("Customer is likely to purchase the tourism package.")
     else:
-        st.warning(
-            "Customer is unlikely to purchase the tourism package."
-        )
+        st.warning("Customer is unlikely to purchase the tourism package.")
+    st.write(f"Estimated purchase probability: {probability:.1%}")

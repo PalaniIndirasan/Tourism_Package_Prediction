@@ -1,13 +1,16 @@
 name: Tourism Project
+
 on:
   push:
-    branches: [main]
-    paths-ignore:
-      - "tourism_project/deployment/*.joblib"
-  workflow_dispatch:
+    branches:
+      - main  # Automatically triggers on push to the main branch
+  workflow_dispatch:  # lets you click "Run workflow" in the Actions tab
+
 permissions:
   contents: write
+
 jobs:
+
   register-dataset:
     runs-on: ubuntu-latest
     steps:
@@ -15,8 +18,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r tourism_project/requirements.txt
-      - run: python tourism_project/model_building/data_register.py
+      - name: Install Dependencies
+        run: pip install -r tourism_project/requirements.txt
+      - name: Register Dataset
+        run: python tourism_project/model_building/data_register.py
+      - name: Upload Registered Dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: registered-data
+          path: tourism_project/data/tourism.csv
+
   data-prep:
     needs: register-dataset
     runs-on: ubuntu-latest
@@ -25,9 +36,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r tourism_project/requirements.txt
-      - run: python tourism_project/model_building/prep.py
-      - uses: actions/upload-artifact@v4
+      - name: Install Dependencies
+        run: pip install -r tourism_project/requirements.txt
+      - name: Run Data Preparation
+        run: python tourism_project/model_building/prep.py
+      - name: Upload Train Test Splits
+        uses: actions/upload-artifact@v4
         with:
           name: data-splits
           path: |
@@ -35,7 +49,8 @@ jobs:
             Xtest.csv
             ytrain.csv
             ytest.csv
-  model-training:
+
+  model-traning:
     needs: data-prep
     runs-on: ubuntu-latest
     steps:
@@ -43,22 +58,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r tourism_project/requirements.txt
-      - uses: actions/download-artifact@v4
+      - name: Install Dependencies
+        run: pip install -r tourism_project/requirements.txt
+      - name: Download Train Test Splits
+        uses: actions/download-artifact@v4
         with:
           name: data-splits
-      - name: Train and save model
-        run: python tourism_project/model_building/train.py
-      - name: Verify saved model
+      - name: Start MLflow Server
         run: |
-          test -s tourism_project/deployment/tourism_package_prediction.joblib
-          ls -lh tourism_project/deployment/tourism_package_prediction.joblib
-      - name: Commit trained model
+          nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
+          sleep 5  # Wait for a moment to let the server starts
+      - name: Model Building
+        run: python tourism_project/model_building/train.py
+      - name: Commit Trained Model
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f tourism_project/deployment/tourism_package_prediction.joblib
-          if ! git diff --cached --quiet; then
-            git commit -m "Update trained tourism model [skip ci]"
-            git push
-          fi
+          git add tourism_project/deployment/tourism_package_prediction.joblib   # path to the saved model file
+          git commit -m "Add trained model [skip ci]" || echo "No changes to commit"
+          git push

@@ -18,8 +18,8 @@ Please enter the details below to get a prediction.
 TypeofContact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
 Occupation = st.selectbox("Occupation", ["Free Lancer", "Salaried", "Large Business", "Small Business"])
 Gender = st.selectbox("Gender", ["Male", "Female"])
-ProductPitched = st.selectbox("ProductPitched", ["Basic", "Standard", "Deluxe", "King", "Super Deluxe"]) 
-MaritalStatus = st.selectbox("MaritalStatus", ["Single", "Divorced", "Married"])
+ProductPitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "King", "Super Deluxe"])
+MaritalStatus = st.selectbox("Marital Status", ["Single", "Divorced", "Married"])
 
 
 Age = st.number_input("Age", min_value=1.0, max_value=100.0, value=1.0, step=1)
@@ -33,7 +33,7 @@ Passport = st.number_input("Passport", min_value=0, max_value=1, value=1, step=1
 PitchSatisfactionScore = st.number_input("PitchSatisfactionScore", min_value=1, max_value=5, value=1, step=1)
 OwnCar = st.number_input("OwnCar", min_value=0, max_value=1, value=1, step=1)
 NumberOfChildrenVisiting = st.number_input("NumberOfChildrenVisiting", min_value=0, max_value=3, value=1, step=1)
-MonthlyIncome = st.number_input("MonthlyIncome", min_value=0, max_value=100000, value=1, step=1)
+MonthlyIncome = st.number_input("MonthlyIncome", min_value=0, max_value=100000, value=10000, step=1000)
 
 # Assemble input into DataFrame
 input_data = pd.DataFrame([{

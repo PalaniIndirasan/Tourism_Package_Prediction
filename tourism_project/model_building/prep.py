@@ -1,7 +1,5 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-label_encoder = LabelEncoder()
 
 df = pd.read_csv("tourism_project/data/tourism.csv", on_bad_lines="skip")
 print("Dataset loaded successfully.")
@@ -94,14 +92,6 @@ for col in numeric_features:
     )
 
 print(df.dtypes)
-
-print("\n---endocing categorical columns---")
-df['TypeofContact'] = label_encoder.fit_transform(df['TypeofContact'])
-df['Occupation'] = label_encoder.fit_transform(df['Occupation'])
-df['Gender'] = label_encoder.fit_transform(df['Gender'])
-df['ProductPitched'] = label_encoder.fit_transform(df['ProductPitched'])
-df['MaritalStatus'] = label_encoder.fit_transform(df['MaritalStatus'])
-df['Designation'] = label_encoder.fit_transform(df['Designation'])
 
 print("\n--- Anomaly Detection ---")
 anomaly_rules = {

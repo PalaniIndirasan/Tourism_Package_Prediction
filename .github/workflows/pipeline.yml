@@ -50,7 +50,7 @@ jobs:
             ytrain.csv
             ytest.csv
 
-  model-traning:
+  model-training:
     needs: data-prep
     runs-on: ubuntu-latest
     steps:
@@ -70,6 +70,10 @@ jobs:
           sleep 5  # Wait for a moment to let the server starts
       - name: Model Building
         run: python tourism_project/model_building/train.py
+      - name: Verify Trained Model
+        run: |
+          test -s tourism_project/deployment/tourism_package_prediction.joblib
+          echo "Trained model verified successfully."
       - name: Commit Trained Model
         run: |
           git config user.name "github-actions[bot]"

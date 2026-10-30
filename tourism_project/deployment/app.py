@@ -58,7 +58,6 @@ input_data = pd.DataFrame([{
     'MonthlyIncome': MonthlyIncome
 }])
 
-
 # Predict button
 if st.button("Tourism Prediction"):
 

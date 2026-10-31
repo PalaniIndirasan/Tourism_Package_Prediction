@@ -1,3 +1,4 @@
+# Train, Optimize, Evaluate, and Save XGBoost Classifier with MLflow Tracking
 # for data manipulation
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -24,7 +25,7 @@ ytest  = pd.read_csv("ytest.csv").squeeze()
 numeric_features = [
     "Age", "CityTier", "DurationOfPitch", "NumberOfPersonVisiting",
     "NumberOfFollowups", "PreferredPropertyStar", "NumberOfTrips",
-    "Passport", "OwnCar", "NumberOfChildrenVisiting", "MonthlyIncome"
+    "Passport", "PitchSatisfactionScore", "OwnCar", "NumberOfChildrenVisiting", "MonthlyIncome"
 ]
 categorical_features = [
     "TypeofContact", "Occupation", "Gender", "ProductPitched",

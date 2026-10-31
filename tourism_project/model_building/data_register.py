@@ -1,3 +1,4 @@
+# Register and Validate Tourism Dataset
 import pandas as pd
 
 RAW_PATH = "tourism_project/data/tourism.csv"
@@ -15,7 +16,7 @@ expected_columns = [
     "CustomerID", "ProdTaken", "Age", "TypeofContact", "CityTier",
     "DurationOfPitch", "Occupation", "Gender", "NumberOfPersonVisiting",
     "NumberOfFollowups", "ProductPitched", "PreferredPropertyStar",
-    "MaritalStatus", "NumberOfTrips", "Passport", "OwnCar" , "NumberOfChildrenVisiting" , "Designation", "MonthlyIncome" ,
+    "MaritalStatus", "NumberOfTrips", "Passport", "PitchSatisfactionScore", "OwnCar" , "NumberOfChildrenVisiting" , "Designation", "MonthlyIncome" ,
 ]
 missing = [c for c in expected_columns if c not in df.columns]
 if missing:
